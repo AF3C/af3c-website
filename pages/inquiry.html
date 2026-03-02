@@ -39,17 +39,17 @@
 				</ul>
 			</nav>
 		</header>
-		<section id="status-check" style="margin-top: 50px; padding: 30px; background: #fff; border: 2px solid var(--border-color); border-radius: 8px;">
-			<h2 style="color: var(--accent-color); text-align: center; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">📄 融資実行公告・審査状況照会</h2>
-			<p style="text-align: center; font-size: 0.9rem; margin-bottom: 20px;">申請時にお控えいただいた「受付番号」を入力してください。</p>
+		<section id="status-check">
+			<h2>融資実行公告・審査状況照会</h2>
+			<p>申請時にお控えいただいた「受付番号」を入力してください。</p>
 
-			<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-				<input type="text" id="checkNo" placeholder="例: 農林-2026-A1B2" style="padding: 10px; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;">
-				<button onclick="checkStatus()" style="padding: 10px 20px; background: var(--accent-color); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">照会</button>
+			<div class="status-form-group">
+				<input type="text" id="checkNo" placeholder="例: 農林-2026-A1B2">
+				<button onclick="checkStatus()" class="status-btn">照会</button>
 			</div>
 
-			<div id="status-result" style="display:none; padding: 15px; border-radius: 4px; text-align: center; font-weight: bold; font-size: 1.1rem;">
-				</div>
+			<div id="status-result">
+			</div>
 		</section>
 
 		<script>
