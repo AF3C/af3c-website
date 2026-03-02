@@ -76,27 +76,26 @@
 					<div class="checkbox-group">
 						<label for="packA">
 							<input type="checkbox" id="packA" class="recalc">
-							<span>農林水産業優遇制度 (-2.0%) <a href="description.html">?</a></span>
+							<span>農林水産業優遇制度 (-2.0%) <a href="description.html#packA">(?)</a></span>
 						</label>
 						<label for="packB">
 							<input type="checkbox" id="packB" class="recalc">
-							<span>景観保全型開発優遇制度 (-2.0%) <a href="description.html">?</a></span>
+							<span>景観保全型開発優遇制度 (-2.0%) <a href="description.html#packB">(?)</a></span>
 						</label>
 					</div>
 				</div>
 
 				<div id="repayment-preview">
 					<p>適用月利: <span id="view-rate">2.0</span>%</p>
-					<p>最終返済期限: <span id="view-deadline">-</span></p>
+					<p>返済目安日: <span id="view-deadline">-</span></p>
 					<div class="total-amount">
-						最終返済額: <span id="view-total">0</span> €
+						最終返済額: € <span id="view-total">0</span>
 					</div>
-					<p>※これはプレビューであり、実際の返済額は変更されることがあります</p>
 				</div>
 
 				<div class="form-group">
 					<label for="plan">事業計画</label>
-					<textarea id="plan" placeholder="資金の使い道を記入してください。金利減免制度を利用する場合に参照します。" required></textarea>
+					<textarea id="plan" placeholder="資金の使い道を記入してください。&#10;金利減免制度を利用する場合、事業計画を参照の上融資を判断します。" required></textarea>
 					<p class="error-text">事業計画を入力してください。</p>
 				</div>
 
@@ -167,7 +166,6 @@
 
 				const firstError = form.querySelector(':invalid');
 				if (firstError) {
-					// スマホキーボード展開のラグを考慮し、少し遅延させてスクロール
 					setTimeout(() => {
 						const y = firstError.getBoundingClientRect().top + window.pageYOffset - 80;
 						window.scrollTo({ top: y, behavior: 'smooth' });
