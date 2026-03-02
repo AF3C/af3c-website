@@ -49,9 +49,25 @@
 			<div class="feature-card">
 				<h3>代表者・連絡先</h3>
 				<p>代表者は  I_korobka (カロッカ) です。農林公庫に係わる連絡はDiscord上にて行うか、 i@reale-korobka.com までお願いします。</p>
-				<img src="https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/080506_s.jpg">
+				<img id="random-image" src="" style="max-width: 100%;">
 			</div>
 		</section>
+
+		<script>
+		const imageStock = [
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/080506_s.jpg",
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/080304_l.jpg",
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/080910_l.jpg",
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/081112_l.jpg",
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/090102_l.jpg",
+			"https://warp.ndl.go.jp/20080625/20080625015820/http://www.afc.go.jp/wallpaper/off/img/080708_l.jpg"
+		];
+
+		const randomIndex = Math.floor(Math.random() * imageStock.length);
+		const selectedImage = imageStock[randomIndex];
+
+		document.getElementById('random-image').src = selectedImage;
+		</script>
 		<footer>
 			このサイトは架空のものです。
 		</footer>
