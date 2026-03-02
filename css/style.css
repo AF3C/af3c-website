@@ -92,6 +92,7 @@ h1 {
 	color: var(--main-green);
 }
 
+
 a {
 	color: var(--link-color);
 }
@@ -106,6 +107,23 @@ img {
 	display: block;
 	border: var(--text-color) 1px;
 	margin: 10px 0;
+}
+
+article {
+	border-bottom: 1px solid var(--border-color);
+	padding-bottom: 20px;
+	margin-bottom: 50px;
+}
+
+article h2 {
+	font-size: 1.4rem;
+	border-left: 4px solid var(--main-green);
+	padding-left: 15px;
+	margin-top: 40px;
+	margin-bottom: 20px;
+	background-color: #f9f9f9;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 /*
@@ -305,6 +323,20 @@ select:invalid:not(:placeholder-shown) {
 .show-errors input:invalid,
 .show-errors textarea:invalid {
 	border: 2px solid #ff4d4d;
+}
+
+.error-text {
+	color: #ff4d4d;
+	font-size: 0.85rem;
+	margin-top: 5px;
+	font-weight: bold;
+	display: none;
+}
+
+.show-errors input:invalid ~ .error-text,
+.show-errors textarea:invalid ~ .error-text,
+.show-errors select:invalid ~ .error-text {
+	display: block;
 }
 
 /*
