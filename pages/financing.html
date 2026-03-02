@@ -137,10 +137,24 @@
 
 		document.getElementById('loanForm').onsubmit = async (e) => {
 			e.preventDefault();
+
+			const form = e.target;
 			const btn = document.getElementById('submitBtn');
-			const form = document.getElementById('loanForm');
 			const successBox = document.getElementById('submit-success');
 			const resultNo = document.getElementById('result-no');
+
+			if (!form.checkValidity()) {
+				form.classList.add('show-errors');
+
+				const firstError = form.querySelector(':invalid');
+				if (firstError) {
+					firstError.focus();
+					firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+
+				form.reportValidity();
+				return;
+			}
 
 			btn.disabled = true;
 
@@ -152,8 +166,8 @@
 			const payload = {
 				id: document.getElementById('mcid')?.value,
 				discord: document.getElementById('discordname').value,
-				amount: parseInt(document.getElementById('amount').value),
-				duration: parseInt(document.getElementById('duration').value),
+				amount: amountVal,
+				duration: durationVal,
 				usePackA: document.getElementById('packA').checked,
 				usePackB: document.getElementById('packB').checked,
 				plan: document.getElementById('plan').value
