@@ -98,6 +98,15 @@
 
 				<button type="submit" id="submitBtn">この内容で申請する</button>
 			</form>
+			<div id="submit-success" style="display:none; margin-top: 20px; padding: 20px; border: 2px solid var(--main-green); background: #f0f4e8; border-radius: 8px; text-align: center;">
+				<h3 style="color: var(--main-green); font-weight: bold; margin-bottom: 10px;">✅ 申請を受理しました</h3>
+				<p style="font-size: 0.9rem; margin-bottom: 10px;">あなたの受付番号：</p>
+				<div style="font-size: 1.5rem; font-weight: bold; color: #333; background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 15px; border: 1px solid var(--border-color);" id="result-no">---</div>
+
+				<button onclick="copyNo()" style="padding: 8px 15px; font-size: 0.9rem; background: #666; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">番号をコピーする</button>
+				<br>
+				<a href="inquiry.html" style="color: var(--link-color); text-decoration: underline; font-size: 0.9rem;">さっそく審査状況を確認する</a>
+	</div>
 		</section>
 
 		<script>
@@ -131,6 +140,10 @@
 		document.getElementById('loanForm').onsubmit = async (e) => {
 			e.preventDefault();
 			const btn = document.getElementById('submitBtn');
+			const form = document.getElementById('loanForm');
+			const successBox = document.getElementById('submit-success');
+			const resultNo = document.getElementById('result-no');
+
 			btn.disabled = true;
 
 			const payload = {
@@ -149,13 +162,30 @@
 					method: 'POST',
 					body: JSON.stringify(payload)
 				});
-				alert("申請を受理しました！");
+				const data = await res.json(); // サーバーからのレスポンスを解析
+
+				if (res.ok) {
+					// フォームを隠して結果を表示
+					form.style.display = 'none';
+					successBox.style.display = 'block';
+					resultNo.innerText = data.applicationNo; // 受付番号を表示
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				} else {
+					alert("エラー: " + data.message);
+				}
 			} catch (err) {
-				alert("送信失敗");
+				alert("送信失敗: 通信エラーが発生しました");
 			} finally {
 				btn.disabled = false;
 			}
 		};
+
+		function copyNo() {
+			const no = document.getElementById('result-no').innerText;
+			navigator.clipboard.writeText(no).then(() => {
+				alert("受付番号をコピーしました！");
+			});
+		}
 		</script>
 		<footer>
 			このサイトは架空のものです。
