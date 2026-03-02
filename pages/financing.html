@@ -7,18 +7,18 @@
 	<meta property="og:title" content="ホームページ">
 	<meta property="og:description" content="農林漁業金融公庫のウェブサイトへようこそ">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://af3c.reale-korobka.com">
+	<meta property="og:url" content="https://af3c.reale-korobka.com/pages/financing.html">
 	<meta property="og:image" content="https://data.reale-korobka.com/images/AF3C_logo.png">
-	<meta property="og:image" content="https://data.reale-korobka.com/images/AF3C_logo2.png">
 	<meta property="og:site_name" content="農林漁業金融公庫">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="ホームページ">
 	<meta name="twitter:description" content="農林漁業金融公庫のウェブサイトへようこそ">
 	<meta name="twitter:image" content="https://data.reale-korobka.com/images/AF3C_logo.png">
+	<meta name="robots" content="noindex, nofollow">
 
-	<link rel="stylesheet" href="css/reset.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="../css/reset.css">
+	<link rel="stylesheet" href="../css/style.css">
 	<link rel="icon" href="https://data.reale-korobka.com/images/AF3C_favicon.png">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,15 +32,131 @@
 			<span class="subtitle">Agriculture Forestry and Fisheries Finance Corporation</span>
 			<nav>
 				<ul>
-					<li><a href="./" class="gerade">ホーム</a></li>
-					<li><a href="pages/description.html">融資制度</a></li>
-					<li><a href="pages/financing.html" class="borrow">融資申請</a></li>
+					<li><a href="../">ホーム</a></li>
+					<li><a href="description.html">融資制度</a></li>
+					<li><a href="financing.html" class="borrow">融資申請</a></li>
 				</ul>
 			</nav>
 		</header>
-		<img src="https://data.reale-korobka.com/images/AF3C_logo.png">
+		<section id="koko-form">
+			<h2>農林漁業金融公庫 融資申請書</h2>
+			<form id="loanForm">
+				<div class="form-group">
+					<label for="mcid">Minecraft ID</label>
+					<input type="text" id="mcid" name="id" placeholder="例: I_korobka" required>
+				</div>
+
+				<div class="form-group">
+					<label for="discordname">Discord名</label>
+					<input type="text" id="discordname" placeholder="例: カロッカ" required>
+				</div>
+
+				<div class="form-group">
+					<label for="amount">借入希望額 (€)</label>
+					<input type="number" id="amount" value="10000" min="10000" max="500000" step="10000" required>
+				</div>
+
+				<div class="form-group">
+					<label for="duration">借入期間 (月単位)</label>
+					<select id="duration">
+						<option value="1">1ヶ月</option>
+						<option value="2">2ヶ月</option>
+						<option value="3">3ヶ月</option>
+						<option value="4">4ヶ月</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>金利減免制度 (重複適用可)</label>
+					<div class="checkbox-group">
+						<label for="packA">
+							<input type="checkbox" id="packA" class="recalc">
+							<span>農林水産業優遇制度 (-2.0%) <a href="description.html">?</a></span>
+						</label>
+						<label for="packB">
+							<input type="checkbox" id="packB" class="recalc">
+							<span>景観保全型開発優遇制度 (-2.0%) <a href="description.html">?</a></span>
+						</label>
+					</div>
+				</div>
+
+				<div id="repayment-preview">
+					<p>適用月利: <span id="view-rate">2.0</span>%</p>
+					<p>最終返済期限: <span id="view-deadline">-</span></p>
+					<div class="total-amount">
+						最終返済額: <span id="view-total">0</span> €
+					</div>
+					<p>※これはプレビューであり、実際の返済額は変更されることがあります</p>
+				</div>
+
+				<div class="form-group">
+					<label for="plan">事業計画</label>
+					<textarea id="plan" placeholder="資金の使い道を記入してください。金利減免制度を利用する場合に参照します。" required></textarea>
+				</div>
+
+				<button type="submit" id="submitBtn">この内容で申請する</button>
+			</form>
+		</section>
+
+		<script>
+		const baseRate = 5.0;
+
+		function updatePreview() {
+			const amount = parseInt(document.getElementById('amount').value) || 0;
+			const duration = parseInt(document.getElementById('duration').value);
+
+			let currentRate = baseRate;
+			if (document.getElementById('packA').checked) currentRate -= 2.0;
+			if (document.getElementById('packB').checked) currentRate -= 2.0;
+
+			const interestTotal = amount * (currentRate / 100) * duration;
+			const totalRepayment = amount + interestTotal;
+
+			const deadline = new Date();
+			deadline.setMonth(deadline.getMonth() + duration);
+
+			document.getElementById('view-rate').innerText = currentRate.toFixed(1);
+			document.getElementById('view-total').innerText = totalRepayment.toLocaleString();
+			document.getElementById('view-deadline').innerText = deadline.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+		}
+
+		document.querySelectorAll('#amount, #duration, .recalc').forEach(el => {
+			el.addEventListener('input', updatePreview);
+		});
+
+		updatePreview();
+
+		document.getElementById('loanForm').onsubmit = async (e) => {
+			e.preventDefault();
+			const btn = document.getElementById('submitBtn');
+			btn.disabled = true;
+
+			const payload = {
+				id: document.getElementById('mcid')?.value,
+				discord: document.getElementById('discordname').value,
+				amount: document.getElementById('amount').value,
+				duration: document.getElementById('duration').value,
+				rate: document.getElementById('view-rate').innerText,
+				total: document.getElementById('view-total').innerText,
+				deadline: document.getElementById('view-deadline').innerText,
+				plan: document.getElementById('plan').value
+			};
+
+			try {
+				const res = await fetch('https://af3c-api.yukkurium.workers.dev/', {
+					method: 'POST',
+					body: JSON.stringify(payload)
+				});
+				alert("申請を受理しました！");
+			} catch (err) {
+				alert("送信失敗");
+			} finally {
+				btn.disabled = false;
+			}
+		};
+		</script>
 		<footer>
-			農林漁業金融公庫
+			このサイトは架空のものです。
 		</footer>
 	</main>
 </body>
