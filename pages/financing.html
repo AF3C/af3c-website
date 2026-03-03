@@ -52,7 +52,10 @@
 				<div id="discord-login-section" class="form-group">
 					<label>Discord連携</label>
 					<p style="font-size: 0.9rem; margin-bottom: 10px;">本人確認のため、Discordアカウントを連携してください。</p>
-					<a href="https://discord.com/api/oauth2/authorize?client_id=1478317793689473127&redirect_uri=https%3A%2F%2Faf3c-api.reale-korobka.com%2Fauth%2Fcallback&response_type=code&scope=identify" id="discordLoginBtn" style="display:inline-block; padding:10px 20px; background:#5865F2; color:white; border-radius:4px; text-decoration:none; font-weight:bold;">Discordでログイン</a>
+
+					<button type="button" onclick="openDiscordLogin()" id="discordLoginBtn" style="padding:10px 20px; background:#5865F2; color:white; border-radius:4px; font-weight:bold; border:none; cursor:pointer;">
+						Discordでログイン
+					</button>
 				</div>
 
 				<div id="discord-info-section" class="form-group" style="display:none;">
@@ -116,28 +119,41 @@
 		<script>
 		const baseRate = 5.0;
 
-		window.addEventListener('DOMContentLoaded', () => {
-			const urlParams = new URLSearchParams(window.location.search);
-			const discordName = urlParams.get('discord_name');
-			const discordId = urlParams.get('discord_id');
-			const submitBtn = document.getElementById('submitBtn');
+		// ▼▼▼ 追加する処理 ▼▼▼
+		function openDiscordLogin() {
+			const clientId = '1478317793689473127';
+			const redirectUri = encodeURIComponent('https://af3c-api.reale-korobka.com/auth/callback');
+			const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`;
 
-			if (discordName && discordId) {
-				// ログイン成功時：ボタンを隠して名前を表示
+			const width = 500;
+			const height = 700;
+			const left = (window.screen.width / 2) - (width / 2);
+			const top = (window.screen.height / 2) - (height / 2);
+			window.open(url, 'DiscordLogin', `width=${width},height=${height},top=${top},left=${left}`);
+		}
+
+		window.addEventListener('message', (event) => {
+			if (event.origin !== 'https://af3c-api.reale-korobka.com') return;
+
+			if (event.data && event.data.type === 'DISCORD_AUTH_SUCCESS') {
 				document.getElementById('discord-login-section').style.display = 'none';
 				document.getElementById('discord-info-section').style.display = 'block';
-				document.getElementById('display-discord-name').innerText = discordName;
-				document.getElementById('discordname').value = discordName;
-				document.getElementById('discord_id').value = discordId;
+				document.getElementById('display-discord-name').innerText = event.data.name;
+				document.getElementById('discordname').value = event.data.name;
+				document.getElementById('discord_id').value = event.data.id;
 
-				// URLを綺麗にする（パラメータを消す）
-				window.history.replaceState({}, document.title, window.location.pathname);
-			} else {
-				// 未ログイン時：申請ボタンを押せなくする
-				submitBtn.disabled = true;
-				submitBtn.innerText = "先にDiscordでログインしてください";
-				submitBtn.style.backgroundColor = "#ccc";
+				const submitBtn = document.getElementById('submitBtn');
+				submitBtn.disabled = false;
+				submitBtn.innerText = "この内容で申請する";
+				submitBtn.style.backgroundColor = "";
 			}
+		});
+
+		window.addEventListener('DOMContentLoaded', () => {
+			const submitBtn = document.getElementById('submitBtn');
+			submitBtn.disabled = true;
+			submitBtn.innerText = "先にDiscordで連携してください";
+			submitBtn.style.backgroundColor = "#ccc";
 		});
 
 		function updatePreview() {
