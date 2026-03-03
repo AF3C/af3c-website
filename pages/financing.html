@@ -49,10 +49,17 @@
 					<p class="error-text">Minecraft IDを入力してください。</p>
 				</div>
 
-				<div class="form-group">
-					<label for="discordname">Discord名</label>
-					<input type="text" id="discordname" placeholder="例: カロッカ" required>
-					<p class="error-text">Discord名を入力してください。</p>
+				<div id="discord-login-section" class="form-group">
+					<label>Discord連携</label>
+					<p style="font-size: 0.9rem; margin-bottom: 10px;">本人確認のため、Discordアカウントを連携してください。</p>
+					<a href="https://discord.com/api/oauth2/authorize?client_id=1478317793689473127&redirect_uri=https%3A%2F%2Faf3c-api.reale-korobka.com%2Fauth%2Fcallback&response_type=code&scope=identify" id="discordLoginBtn" style="display:inline-block; padding:10px 20px; background:#5865F2; color:white; border-radius:4px; text-decoration:none; font-weight:bold;">Discordでログイン</a>
+				</div>
+
+				<div id="discord-info-section" class="form-group" style="display:none;">
+					<label>Discordアカウント</label>
+					<p>✅ 連携完了：<span id="display-discord-name" style="font-weight:bold; color:var(--main-green);"></span></p>
+					<input type="hidden" id="discordname" required>
+					<input type="hidden" id="discord_id" required>
 				</div>
 
 				<div class="form-group">
@@ -108,6 +115,30 @@
 
 		<script>
 		const baseRate = 5.0;
+
+		window.addEventListener('DOMContentLoaded', () => {
+			const urlParams = new URLSearchParams(window.location.search);
+			const discordName = urlParams.get('discord_name');
+			const discordId = urlParams.get('discord_id');
+			const submitBtn = document.getElementById('submitBtn');
+
+			if (discordName && discordId) {
+				// ログイン成功時：ボタンを隠して名前を表示
+				document.getElementById('discord-login-section').style.display = 'none';
+				document.getElementById('discord-info-section').style.display = 'block';
+				document.getElementById('display-discord-name').innerText = discordName;
+				document.getElementById('discordname').value = discordName;
+				document.getElementById('discord_id').value = discordId;
+
+				// URLを綺麗にする（パラメータを消す）
+				window.history.replaceState({}, document.title, window.location.pathname);
+			} else {
+				// 未ログイン時：申請ボタンを押せなくする
+				submitBtn.disabled = true;
+				submitBtn.innerText = "先にDiscordでログインしてください";
+				submitBtn.style.backgroundColor = "#ccc";
+			}
+		});
 
 		function updatePreview() {
 			const amountInput = document.getElementById('amount');
