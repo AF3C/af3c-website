@@ -155,7 +155,9 @@
 		document.getElementById('loanForm').onsubmit = async (e) => {
 			e.preventDefault();
 			const form = e.target;
-
+			const btn = document.getElementById('submitBtn');
+			const successBox = document.getElementById('submit-success');
+			const resultNo = document.getElementById('result-no');
 			if (!form.checkValidity()) {
 				form.classList.add('show-errors');
 				form.reportValidity();
