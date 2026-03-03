@@ -15,6 +15,7 @@
 	--link-color: #2e73d3;
 	--accent-color: #4a4a4a;
 	--border-color: #d1d1d1;
+	--danger-color: #ff4d4d;
 }
 
 html {
@@ -367,27 +368,37 @@ article p {
 input:invalid:not(:placeholder-shown),
 textarea:invalid:not(:placeholder-shown),
 select:invalid:not(:placeholder-shown) {
-	border: 2px solid #ff4d4d;
+	border: 2px solid var(--danger-color);
 	background-color: #fff5f5;
 }
 
 .show-errors input:invalid,
 .show-errors textarea:invalid {
-	border: 2px solid #ff4d4d;
+	border: 2px solid var(--danger-color);
 }
 
 .error-text {
-	color: #ff4d4d;
+	color: var(--danger-color);
 	font-size: 0.85rem;
 	margin-top: 5px;
 	font-weight: bold;
 	display: none;
 }
 
-.show-errors input:invalid ~ .error-text,
-.show-errors textarea:invalid ~ .error-text,
-.show-errors select:invalid ~ .error-text {
+input:invalid:not(:placeholder-shown) ~ .error-text {
 	display: block;
+}
+
+.form-group label span.note {
+	font-size: 0.85rem;
+	font-weight: normal;
+	color: #666;
+}
+
+#repayment-preview span.note {
+	font-size: 0.85rem;
+	font-weight: normal;
+	color: #666;
 }
 
 /*
@@ -453,6 +464,35 @@ select:invalid:not(:placeholder-shown) {
 	text-align: center;
 	font-weight: bold;
 	font-size: 1.1rem;
+}
+
+.status-detail {
+	font-size: 0.9rem;
+	font-weight: normal;
+}
+
+.status-approved {
+	background: #e8f5e9;
+	border: 2px solid #4caf50;
+	color: #2e7d32;
+}
+
+.status-pending {
+	background: #fff8e1;
+	border: 2px solid #ffb300;
+	color: #ff8f00;
+}
+
+.status-rejected {
+	background: #ffebee;
+	border: 2px solid #f44336;
+	color: #c62828;
+}
+
+.status-none {
+	background: #f5f5f5;
+	border: 2px solid #9e9e9e;
+	color: #616161;
 }
 
 /*
