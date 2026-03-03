@@ -51,16 +51,16 @@
 
 				<div id="discord-login-section" class="form-group">
 					<label>Discord連携</label>
-					<p style="font-size: 0.9rem; margin-bottom: 10px;">本人確認のため、Discordアカウントを連携してください。</p>
+					<p>本人確認のため、Discordアカウントを連携してください。</p>
 
-					<button type="button" onclick="openDiscordLogin()" id="discordLoginBtn" style="padding:10px 20px; background:#5865F2; color:white; border-radius:4px; font-weight:bold; border:none; cursor:pointer;">
+					<button type="button" onclick="openDiscordLogin()" id="discordLoginBtn">
 						Discordでログイン
 					</button>
 				</div>
 
-				<div id="discord-info-section" class="form-group" style="display:none;">
+				<div id="discord-info-section" class="form-group">
 					<label>Discordアカウント</label>
-					<p>✅ 連携完了：<span id="display-discord-name" style="font-weight:bold; color:var(--main-green);"></span></p>
+					<p>✅ 連携完了：<span id="display-discord-name"></span></p>
 					<input type="hidden" id="discordname" required>
 					<input type="hidden" id="discord_id" required>
 				</div>
