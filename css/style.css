@@ -220,47 +220,95 @@ article p {
 }
 
 .loan-card {
-	margin-bottom: 20px;
-	padding: 20px;
-	border-radius: 8px;
+	margin-bottom: 25px;
+	padding: 0;
+	border-radius: 12px;
 	text-align: left;
+	background: #ffffff;
+	border: 1px solid var(--border-color);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+	overflow: hidden;
+	transition: transform 0.2s ease;
 }
+
+.loan-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.loan-card.status-approved { border-left: 6px solid #4caf50; }
+.loan-card.status-pending  { border-left: 6px solid #ffb300; }
+.loan-card.status-rejected { border-left: 6px solid #f44336; }
 
 .loan-card-header {
+	padding: 15px 20px;
+	background: #fcfcfc;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	font-weight: bold;
-	font-size: 1.1rem;
-	border-bottom: 1px solid currentColor;
-	padding-bottom: 8px;
-	margin-bottom: 15px;
 }
 
-.loan-card-no {
+.status-badge {
+	padding: 4px 12px;
+	border-radius: 20px;
 	font-size: 0.8rem;
-	float: right;
-	font-weight: normal;
-	margin-top: 5px;
+	color: #fff;
+}
+.status-approved .status-badge { background-color: #4caf50; }
+.status-pending .status-badge  { background-color: #ffb300; }
+.status-rejected .status-badge { background-color: #f44336; }
+
+.loan-card-no {
+	font-family: monospace;
+	color: #666;
+	font-size: 0.85rem;
+}
+
+.loan-card-body {
+	padding: 20px;
 }
 
 .loan-card-grid {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 10px;
-	margin-bottom: 10px;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: 20px;
+	margin-bottom: 15px;
 }
 
 .loan-card-item {
 	margin: 0;
-	font-size: 0.95rem;
 }
 
-.loan-card-item-full {
-	grid-column: 1 / -1;
+.loan-card-item strong {
+	display: block;
+	font-size: 0.75rem;
+	color: #888;
+	text-transform: uppercase;
+	margin-bottom: 4px;
 }
+
+.loan-card-value {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--text-color);
+}
+
+.loan-card-value.amount { color: var(--main-green); }
+.loan-card-value.total { color: #a52a2a; }
 
 .loan-card-plan {
-	margin: 0;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px dashed #eee;
 	font-size: 0.85rem;
-	opacity: 0.85;
+	color: #555;
+	line-height: 1.6;
+}
+
+.loan-card-plan strong {
+	color: var(--text-color);
 }
 
 .status-approved, .status-pending, .status-rejected, .status-none {

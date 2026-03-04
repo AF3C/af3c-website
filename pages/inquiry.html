@@ -107,28 +107,42 @@
 				let statusClass = '', statusText = '';
 				if (loan.status === 'approved') {
 					statusClass = 'status-approved';
-					statusText = '【可決・送金済】';
+					statusText = '可決・送金済';
 				} else if (loan.status === 'pending') {
 					statusClass = 'status-pending';
-					statusText = '【審査中】';
+					statusText = '審査中';
 				} else if (loan.status === 'rejected') {
 					statusClass = 'status-rejected';
-					statusText = '【見送り】';
+					statusText = '見送り';
 				}
 
 				html += `
 					<div class="loan-card ${statusClass}">
 						<div class="loan-card-header">
-							${statusText} <span class="loan-card-no">${loan.applicationNo}</span>
+							<span class="status-badge">${statusText}</span>
+							<span class="loan-card-no">#${loan.applicationNo}</span>
 						</div>
-						<div class="loan-card-grid">
-							<p class="loan-card-item"><strong>借入額:</strong><br>€ ${loan.amount.toLocaleString()}</p>
-							${loan.status === 'approved' ? `
-								<p class="loan-card-item"><strong>最終返済額:</strong><br>€ ${loan.total.toLocaleString()}</p>
-								<p class="loan-card-item loan-card-item-full"><strong>返済目安日:</strong> ${loan.deadline}</p>
-							` : ''}
+						<div class="loan-card-body">
+							<div class="loan-card-grid">
+								<div class="loan-card-item">
+									<strong>借入額</strong>
+									<span class="loan-card-value amount">€ ${loan.amount.toLocaleString()}</span>
+								</div>
+								${loan.status === 'approved' ? `
+									<div class="loan-card-item">
+										<strong>最終返済額</strong>
+										<span class="loan-card-value total">€ ${loan.total.toLocaleString()}</span>
+									</div>
+									<div class="loan-card-item">
+										<strong>返済目安日</strong>
+										<span class="loan-card-value">${loan.deadline}</span>
+									</div>
+								` : ''}
+							</div>
+							<div class="loan-card-plan">
+								<strong>事業計画:</strong> ${loan.plan}
+							</div>
 						</div>
-						<p class="loan-card-plan"><strong>事業計画:</strong> ${loan.plan.length > 40 ? loan.plan.substring(0, 40) + '...' : loan.plan}</p>
 					</div>
 				`;
 			});
