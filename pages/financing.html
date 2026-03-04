@@ -61,8 +61,7 @@
 				<div id="discord-info-section" class="form-group">
 					<label>Discordアカウント</label>
 					<p>✅ 連携完了：<span id="display-discord-name"></span></p>
-					<input type="hidden" id="discordname" required>
-					<input type="hidden" id="discord_id" required>
+					<input type="hidden" id="authToken" required>
 				</div>
 
 				<div class="form-group">
@@ -144,8 +143,7 @@
 				document.getElementById('discord-login-section').style.display = 'none';
 				document.getElementById('discord-info-section').style.display = 'block';
 				document.getElementById('display-discord-name').innerText = event.data.name;
-				document.getElementById('discordname').value = event.data.name;
-				document.getElementById('discord_id').value = event.data.id;
+				document.getElementById('authToken').value = event.data.token;
 
 				const submitBtn = document.getElementById('submitBtn');
 				submitBtn.disabled = false;
@@ -225,7 +223,7 @@
 
 			const payload = {
 				id: document.getElementById('mcid')?.value,
-				discord: document.getElementById('discordname').value,
+				authToken: document.getElementById('authToken').value,
 				amount: amountVal,
 				duration: durationVal,
 				usePackA: document.getElementById('packA').checked,
