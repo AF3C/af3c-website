@@ -120,12 +120,12 @@
 					<div class="loan-card ${statusClass}">
 						<div class="loan-card-header">
 							<span class="status-badge">${statusText}</span>
-							<span class="loan-card-no">#${loan.applicationNo}</span>
+							<span class="loan-card-no">受付番号: ${loan.applicationNo}</span>
 						</div>
 						<div class="loan-card-body">
 							<div class="loan-card-grid">
 								<div class="loan-card-item">
-									<strong>借入額</strong>
+									<strong>借入希望額</strong>
 									<span class="loan-card-value amount">€ ${loan.amount.toLocaleString()}</span>
 								</div>
 								${loan.status === 'approved' ? `
@@ -140,7 +140,8 @@
 								` : ''}
 							</div>
 							<div class="loan-card-plan">
-								<strong>事業計画:</strong> ${loan.plan}
+								<strong>事業計画:</strong><br>
+								${loan.plan}
 							</div>
 						</div>
 					</div>
