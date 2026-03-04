@@ -40,62 +40,99 @@
 			</nav>
 		</header>
 		<section id="status-check">
-			<h2>融資実行公告・審査状況照会</h2>
-			<p>申請時に控えた「受付番号」を入力してください。</p>
+			<h2>融資状況・履歴照会</h2>
+			<p>ご自身の融資状況や返済額を確認するには、Discordでログインしてください。</p>
 
-			<div class="status-form-group">
-				<input type="text" id="checkNo" placeholder="例: 農林-2026-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-				<button onclick="checkStatus()" class="status-btn">照会</button>
+			<div id="discord-login-section" class="form-group text-center mt-30">
+				<button type="button" onclick="openDiscordLogin()" id="discordLoginBtn" class="discord-btn-large">
+					Discordでログインして照会
+				</button>
 			</div>
 
-			<div id="status-result">
+			<div id="loading-section" class="loading-box" style="display: none;">
+				データを取得しています...
+			</div>
+
+			<div id="status-result" style="display: none;">
 			</div>
 		</section>
 
 		<script>
-		async function checkStatus() {
-			const no = document.getElementById('checkNo').value.trim();
-			const resultDiv = document.getElementById('status-result');
-			const btn = document.querySelector('#status-check button');
+		function openDiscordLogin() {
+			const clientId = '1478317793689473127';
+			const redirectUri = encodeURIComponent('https://af3c-api.reale-korobka.com/auth/callback');
+			const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`;
 
-			if(!no) {
-				alert("受付番号を入力してください。");
+			const width = 500, height = 700;
+			const left = (window.screen.width / 2) - (width / 2);
+			const top = (window.screen.height / 2) - (height / 2);
+			window.open(url, 'DiscordLogin', `width=${width},height=${height},top=${top},left=${left}`);
+		}
+
+		window.addEventListener('message', async (event) => {
+			if (event.origin !== 'https://af3c-api.reale-korobka.com') return;
+
+			if (event.data && event.data.type === 'DISCORD_AUTH_SUCCESS') {
+				document.getElementById('discord-login-section').style.display = 'none';
+				document.getElementById('loading-section').style.display = 'block';
+
+				try {
+					const res = await fetch('https://af3c-api.reale-korobka.com/status', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ authToken: event.data.token })
+					});
+					const data = await res.json();
+					renderLoans(data.loans);
+				} catch (e) {
+					alert('通信エラーが発生しました。');
+					document.getElementById('discord-login-section').style.display = 'block';
+				} finally {
+					document.getElementById('loading-section').style.display = 'none';
+				}
+			}
+		});
+
+		function renderLoans(loans) {
+			const resultDiv = document.getElementById('status-result');
+			resultDiv.style.display = 'block';
+
+			if (!loans || loans.length === 0) {
+				resultDiv.innerHTML = '<div class="status-none">該当する融資データが見つかりません。</div>';
 				return;
 			}
 
-			btn.innerText = "照会中...";
-			btn.disabled = true;
-
-			try {
-				const res = await fetch(`https://af3c-api.reale-korobka.com/status?no=${no}`);
-				const data = await res.json();
-
-				resultDiv.style.display = 'block';
-
-				if(data.status === 'approved') {
-					resultDiv.className = 'status-approved';
-					resultDiv.innerHTML = `【可決・送金済】<br>
-					<span class="status-detail">対象の融資は承認され、ゲーム内口座等への送金手続きが完了しました。<br><br>
-					<strong>最終返済額:</strong> € ${data.total.toLocaleString()}<br>
-					<strong>返済目安日:</strong> ${data.deadline}
-					</span>`;
-				} else if(data.status === 'pending') {
-					resultDiv.className = 'status-pending';
-					resultDiv.innerHTML = `【審査中】<br><span class="status-detail">現在、事業計画の精査および決済手続き中です。しばらくお待ちください。</span>`;
-				} else if(data.status === 'rejected') {
-					resultDiv.className = 'status-rejected';
-					resultDiv.innerHTML = `【見送り】<br><span class="status-detail">誠に残念ながら、今回は公庫の融資基準を満たさなかったため見送りとなりました。</span>`;
-				} else {
-					resultDiv.className = 'status-none';
-					resultDiv.innerHTML = `該当なし<br><span class="status-detail">入力された受付番号のデータが見つかりません。</span>`;
+			let html = '';
+			loans.forEach(loan => {
+				let statusClass = '', statusText = '';
+				if (loan.status === 'approved') {
+					statusClass = 'status-approved';
+					statusText = '【可決・送金済】';
+				} else if (loan.status === 'pending') {
+					statusClass = 'status-pending';
+					statusText = '【審査中】';
+				} else if (loan.status === 'rejected') {
+					statusClass = 'status-rejected';
+					statusText = '【見送り】';
 				}
 
-			} catch (e) {
-				alert("通信エラーが発生しました。");
-			} finally {
-				btn.innerText = "照会";
-				btn.disabled = false;
-			}
+				html += `
+					<div class="loan-card ${statusClass}">
+						<div class="loan-card-header">
+							${statusText} <span class="loan-card-no">${loan.applicationNo}</span>
+						</div>
+						<div class="loan-card-grid">
+							<p class="loan-card-item"><strong>借入額:</strong><br>€ ${loan.amount.toLocaleString()}</p>
+							${loan.status === 'approved' ? `
+								<p class="loan-card-item"><strong>最終返済額:</strong><br>€ ${loan.total.toLocaleString()}</p>
+								<p class="loan-card-item loan-card-item-full"><strong>返済目安日:</strong> ${loan.deadline}</p>
+							` : ''}
+						</div>
+						<p class="loan-card-plan"><strong>事業計画:</strong> ${loan.plan.length > 40 ? loan.plan.substring(0, 40) + '...' : loan.plan}</p>
+					</div>
+				`;
+			});
+			resultDiv.innerHTML = html;
 		}
 		</script>
 		<footer>
