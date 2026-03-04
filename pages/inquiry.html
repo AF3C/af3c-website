@@ -114,6 +114,9 @@
 				} else if (loan.status === 'rejected') {
 					statusClass = 'status-rejected';
 					statusText = '見送り';
+				} else if (loan.status === 'repaid') {
+					statusClass = 'status-repaid';
+					statusText = '完済済';
 				}
 
 				html += `
@@ -128,10 +131,14 @@
 									<strong>借入希望額</strong>
 									<span class="loan-card-value amount">€ ${loan.amount.toLocaleString()}</span>
 								</div>
-								${loan.status === 'approved' ? `
+								${(loan.status === 'approved' || loan.status === 'repaid') ? `
 									<div class="loan-card-item">
-										<strong>最終返済額</strong>
-										<span class="loan-card-value total">€ ${loan.total.toLocaleString()}</span>
+										<strong style="color: #a52a2a;">${loan.status === 'repaid' ? '完済済額' : '現在の返済額'}</strong>
+										<span class="loan-card-value total" style="font-size: 1.3rem;">€ ${loan.currentTotal.toLocaleString()}</span>
+									</div>
+									<div class="loan-card-item">
+										<strong>満期時返済額</strong>
+										<span class="loan-card-value">€ ${loan.total.toLocaleString()}</span>
 									</div>
 									<div class="loan-card-item">
 										<strong>返済目安日</strong>

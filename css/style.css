@@ -321,6 +321,14 @@ article p {
 	text-align: center;
 }
 
+.loan-card.status-repaid { border-left: 6px solid #2196f3; }
+.status-repaid .status-badge { background-color: #2196f3; }
+.status-repaid {
+	background: #e3f2fd;
+	border: 2px solid #2196f3;
+	color: #1565c0;
+}
+
 /*
 .########..#######..########..##.....##
 .##.......##.....##.##.....##.###...###
