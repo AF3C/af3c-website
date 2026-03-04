@@ -74,7 +74,11 @@
 
 				if(data.status === 'approved') {
 					resultDiv.className = 'status-approved';
-					resultDiv.innerHTML = `【可決・送金済】<br><span class="status-detail">対象の融資は承認され、ゲーム内口座等への送金手続きが完了しました。</span>`;
+					resultDiv.innerHTML = `【可決・送金済】<br>
+					<span class="status-detail">対象の融資は承認され、ゲーム内口座等への送金手続きが完了しました。<br><br>
+					<strong>最終返済額:</strong> € ${data.total.toLocaleString()}<br>
+					<strong>返済目安日:</strong> ${data.deadline}
+					</span>`;
 				} else if(data.status === 'pending') {
 					resultDiv.className = 'status-pending';
 					resultDiv.innerHTML = `【審査中】<br><span class="status-detail">現在、事業計画の精査および決済手続き中です。しばらくお待ちください。</span>`;
